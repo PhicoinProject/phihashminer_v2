@@ -78,6 +78,15 @@ cd build
 cmake .. -DETHASHCUDA=ON -DETHASHCL=ON -DAPICORE=ON
 make -sj $(nproc)
 ```
+···
+# for C++ 11
+cd phihashminer
+git submodule update --init --recursive
+mkdir build
+cd build
+ cmake ..   -DETHASHCUDA=ON   -DETHASHCL=ON   -DAPICORE=ON   -DHUNTER_ENABLED=OFF   -DOpenCL_INCLUDE_DIR=/usr/include   -DOpenCL_LIBRARY=/usr/lib/x86_64-linux-gnu/libOpenCL.so    -DCMAKE_CXX_STANDARD_REQUIRED=ON
+ make -sj $(nproc)
+···
 
 
 ### Windows
