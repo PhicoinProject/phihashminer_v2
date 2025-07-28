@@ -14,8 +14,8 @@ cable_configure_toolchain(DEFAULT cxx11)
 set(HUNTER_CONFIGURATION_TYPES Release CACHE STRING "Build type of Hunter packages")
 set(HUNTER_JOBS_NUMBER 6 CACHE STRING "Number of parallel builds used by Hunter")
 HunterGate(
-    URL "https://github.com/cpp-pm/hunter/archive/v0.23.253.tar.gz"
-    SHA1 "88ea6d37c897a81a080eb9ae0f69d7807bbb3c73"
+    URL "https://github.com/cpp-pm/hunter/archive/v0.23.290.tar.gz"
+    SHA1 "04487198159a9754ac9603aa464cd3de23ca3f3d"
 	LOCAL
 )
 
@@ -53,7 +53,7 @@ function(configureProject)
 	endif()
 endfunction()
 
-hunter_add_package(Boost COMPONENTS system filesystem thread)
+# hunter_add_package(Boost COMPONENTS system filesystem thread)
 find_package(Boost CONFIG REQUIRED COMPONENTS system filesystem thread)
 
 hunter_add_package(jsoncpp)

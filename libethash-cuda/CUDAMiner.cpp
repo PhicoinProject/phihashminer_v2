@@ -368,9 +368,9 @@ void CUDAMiner::asyncCompile()
 void CUDAMiner::compileKernel(uint64_t period_seed, uint64_t dag_elms, CUfunction& kernel)
 {
     const char* name = "phihash_search";
-
-    std::string text = PhiHash::getKern(period_seed, PhiHash::KERNEL_CUDA);
-    text += std::string(CUDAMiner_kernel);
+    std::string text = PhiHash::getKern(CUDAMiner_kernel, period_seed, PhiHash::KERNEL_CUDA);
+    // std::string text = PhiHash::getKern(period_seed, PhiHash::KERNEL_CUDA);
+    // text += std::string(CUDAMiner_kernel);
 
     std::string tmpDir;
 #ifdef _WIN32

@@ -848,9 +848,15 @@ bool CLMiner::initEpoch_internal()
         // GPU DAG buffer to kernel
         m_searchKernel.setArg(2, *m_dag);
 
-        m_dagKernel.setArg(1, *m_light);
-        m_dagKernel.setArg(2, *m_dag);
+        uint32_t light_words4[4];
+        PhiHash::calculate_fast_mod_data(m_epochContext.lightNumItems, light_words4[0], light_words4[1], light_words4[2]);
+        light_words4[3] = m_epochContext.lightNumItems;
+
+        m_dagKernel.setArg(1, m_light[0]);
+        m_dagKernel.setArg(2, m_dag[0]);
         m_dagKernel.setArg(3, -1);
+        m_dagKernel.setArg(4, (uint32_t)(m_epochContext.dagSize / sizeof(ethash_hash512)));
+        m_dagKernel.setArg(5, light_words4);
 
         const uint32_t workItems = m_dagItems * 2;  // GPU computes partial 512-bit DAG items.
 
@@ -901,13 +907,10 @@ void CLMiner::asyncCompile()
 
 void CLMiner::compileKernel(uint64_t period_seed, cl::Program& program, cl::Kernel& searchKernel)
 {
-    std::string code = PhiHash::getKern(period_seed, PhiHash::KERNEL_CL);
-    code += string(CLMiner_kernel);
+    std::string code = PhiHash::getKern(CLMiner_kernel, period_seed, PhiHash::KERNEL_CL);
 
     addDefinition(code, "GROUP_SIZE", m_settings.localWorkSize);
     addDefinition(code, "ACCESSES", 64);
-    addDefinition(code, "LIGHT_WORDS", m_epochContext.lightNumItems);
-    addDefinition(code, "PHIHASH_DAG_BYTES", m_epochContext.dagSize);
     addDefinition(code, "PHIHASH_DAG_ELEMENTS", m_epochContext.dagNumItems / 2);
 
     addDefinition(code, "MAX_OUTPUTS", c_maxSearchResults);
